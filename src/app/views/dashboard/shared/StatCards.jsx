@@ -1,5 +1,6 @@
 import { Box, Card, Grid, Icon, IconButton, styled, Tooltip } from '@mui/material';
 import { Small } from 'app/components/Typography';
+import { NavLink } from 'react-router-dom';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
@@ -29,13 +30,59 @@ const Heading = styled('h6')(({ theme }) => ({
 
 const StatCards = () => {
   const cardList = [
-    { name: 'No of Customers', amount: 3050, icon: 'person', color: 'rgb(255 250 0 / 81%)' },
-    { name: 'No of Staffs', amount: 90, icon: 'people', color: 'rgb(255 250 0 / 81%)' },
-    { name: 'No of Admin', amount: 3, icon: 'account_circle', color: 'rgb(255 250 0 / 81%)' },
-    { name: 'No of Active Jobs', amount: 200, icon: 'alarm_on', color: '' },
-    { name: 'No of Pending Jobs', amount: 10, icon: 'warning', color: 'rgb(255 0 0 / 79%)' },
-    { name: 'No of Completed Jobs', amount: 1000, icon: 'check_circle', color: '#08ad6c' },
-    { name: 'Pending Quote', amount: 10, icon: 'warning', color: '#08ad6c' }
+    {
+      name: 'No of Customers',
+      link: '/',
+      amount: 3050,
+      icon: 'person',
+      color: 'rgb(255 250 0 / 81%)'
+    },
+    { name: 'No of Staffs', link: '/', amount: 90, icon: 'people', color: 'rgb(255 250 0 / 81%)' },
+    {
+      name: 'No of Admin',
+      link: '/',
+      amount: 3,
+      icon: 'account_circle',
+      color: 'rgb(255 250 0 / 81%)'
+    },
+    { name: 'No of Active Jobs', link: '/', amount: 200, icon: 'alarm_on', color: '' },
+    {
+      name: 'No of Pending Jobs',
+      link: '/',
+      amount: 10,
+      icon: 'warning',
+      color: 'rgb(255 0 0 / 79%)'
+    },
+    {
+      name: 'No of Completed Jobs',
+      link: '/',
+      amount: 1000,
+      icon: 'check_circle',
+      color: '#08ad6c'
+    },
+    { name: 'Pending Quote', link: '/view-quote', amount: 10, icon: 'warning', color: '#08ad6c' },
+    {
+      name: 'Accepted Quote',
+      link: '/view-quote',
+      amount: 10,
+      icon: 'warning',
+      color: 'rgb(255 0 0 / 79%)'
+    },
+    { name: 'Completed Quote', link: '/view-quote', amount: 10, icon: 'warning', color: '#08ad6c' },
+    {
+      name: 'Pending Invoice',
+      link: '/view-invoice',
+      amount: 10,
+      icon: 'warning',
+      color: '#08ad6c'
+    },
+    {
+      name: 'Paid Invoice',
+      link: '/view-quote',
+      amount: 10,
+      icon: 'warning',
+      color: 'rgb(255 0 0 / 79%)'
+    }
   ];
 
   return (
@@ -55,7 +102,9 @@ const StatCards = () => {
 
             <Tooltip title="View Details" placement="top">
               <IconButton>
-                <Icon>arrow_right_alt</Icon>
+                <NavLink to={item.link}>
+                  <Icon>arrow_right_alt</Icon>
+                </NavLink>
               </IconButton>
             </Tooltip>
           </StyledCard>

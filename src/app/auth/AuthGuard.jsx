@@ -4,6 +4,9 @@ import { Navigate, useLocation } from 'react-router-dom';
 const AuthGuard = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const { pathname } = useLocation();
+  console.log('ddddddddddddddddddllllllllllllll');
+  console.log(isAuthenticated);
+  console.log('ddddddddddddddddddllllllllllllll');
 
   if (isAuthenticated) return <>{children}</>;
 

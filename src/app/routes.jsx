@@ -9,6 +9,7 @@ import { Details } from '@mui/icons-material';
 
 // session pages
 const NotFound = Loadable(lazy(() => import('app/views/sessions/NotFound')));
+const Project = Loadable(lazy(() => import('app/views/project/index')));
 const JwtLogin = Loadable(lazy(() => import('app/views/sessions/JwtLogin')));
 const JwtRegister = Loadable(lazy(() => import('app/views/sessions/JwtRegister')));
 const ForgotPassword = Loadable(lazy(() => import('app/views/sessions/ForgotPassword')));
@@ -25,6 +26,8 @@ const Requests = Loadable(lazy(() => import('app/views/requests/requests')));
 const Admin = Loadable(lazy(() => import('app/views/admin/admin')));
 const Client = Loadable(lazy(() => import('app/views/client/client')));
 const Quote = Loadable(lazy(() => import('app/views/qoute/qoute')));
+const Viewquote = Loadable(lazy(() => import('app/views/views-quote/viewsQoute')));
+const Viewinvoice = Loadable(lazy(() => import('app/views/views-invoice/viewsInvoice')));
 
 const routes = [
   {
@@ -67,6 +70,21 @@ const routes = [
         auth: authRoles.editor
       },
       {
+        path: '/qoute',
+        element: <Quote />,
+        auth: authRoles.editor
+      },
+      {
+        path: '/view-quote',
+        element: <Viewquote />,
+        auth: authRoles.editor
+      },
+      {
+        path: '/view-invoice',
+        element: <Viewinvoice />,
+        auth: authRoles.editor
+      },
+      {
         path: '/client',
         element: <Client />,
         auth: authRoles.editor
@@ -82,6 +100,14 @@ const routes = [
         auth: authRoles.editor
       }
     ]
+  },
+  {
+    path: '/manage-project',
+    element: (
+      <AuthGuard>
+        <Project />
+      </AuthGuard>
+    )
   },
 
   // session pages route

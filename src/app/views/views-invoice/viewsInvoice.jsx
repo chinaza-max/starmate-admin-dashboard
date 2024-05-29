@@ -1,12 +1,14 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import { Call, Email, Restore, Send } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { Grid, styled } from '@mui/material';
+import { Fragment, useState } from 'react';
+import Alert from '@mui/material/Alert';
 
 import CancelIcon from '@mui/icons-material/Close';
 import {
@@ -24,6 +26,10 @@ import {
   randomArrayItem
 } from '@mui/x-data-grid-generator';
 import { Avatar, Tooltip } from '@mui/material';
+const ContentBox = styled('div')(({ theme }) => ({
+  margin: '30px',
+  [theme.breakpoints.down('sm')]: { margin: '16px' }
+}));
 
 const roles = ['Market', 'Finance', 'Development'];
 const randomRole = () => {
@@ -39,6 +45,8 @@ const initialRows = [
     email: 'mosesogbonna68@gmail.com',
     dateOfBirth: randomCreatedDate(),
     tel: 8183746528,
+    status: 'Pending',
+    invoiceStatus: 'expired',
     role: randomRole()
   },
   {
@@ -49,6 +57,8 @@ const initialRows = [
     email: 'mosesogbonna68@gmail.com',
     dateOfBirth: randomCreatedDate(),
     tel: 8183746118,
+    status: 'Pending',
+    invoiceStatus: 'Valid',
     role: randomRole()
   },
   {
@@ -59,6 +69,8 @@ const initialRows = [
     email: 'mosesogbonna68@gmail.com',
     dateOfBirth: randomCreatedDate(),
     tel: 8183746500,
+    status: 'Pending',
+    invoiceStatus: 'Valid',
     role: randomRole()
   },
   {
@@ -69,6 +81,8 @@ const initialRows = [
     email: 'mosesogbonna68@gmail.com',
     dateOfBirth: randomCreatedDate(),
     tel: 8123746528,
+    status: 'Pending',
+    invoiceStatus: 'Valid',
     role: randomRole()
   },
   {
@@ -79,6 +93,8 @@ const initialRows = [
     email: 'mosesogbonna68@gmail.com',
     dateOfBirth: randomCreatedDate(),
     tel: 7183746528,
+    status: 'Pending',
+    invoiceStatus: 'Valid',
     role: randomRole()
   },
   {
@@ -89,32 +105,18 @@ const initialRows = [
     email: 'mosesogbonna68@gmail.com',
     dateOfBirth: randomCreatedDate(),
     tel: 8183746528,
+    status: 'Pending',
+    invoiceStatus: 'Valid',
     role: randomRole()
   }
 ];
 
 function EditToolbar(props) {
-  const { setRows, setRowModesModel, typeP } = props;
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }].reverse());
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' }
-    }));
-  };
+  const { setRows, setRowModesModel } = props;
 
   return (
     <GridToolbarContainer>
-      {typeP === 'registered' ? (
-        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-          Add record
-        </Button>
-      ) : (
-        <Button startIcon={<AddIcon color="disabled" />} onClick={handleClick} disabled>
-          Add record
-        </Button>
-      )}
+      <Button color="primary">Pending Invoice </Button>
     </GridToolbarContainer>
   );
 }
@@ -135,7 +137,6 @@ function AvatarEditInputCell(props) {
 
       reader.readAsDataURL(file);
     }
-    console.log('newValue');
   };
 
   return (
@@ -155,6 +156,13 @@ function renderTel(params) {
     </Button>
   );
 }
+function renderInvoiceStatus(params) {
+  return (
+    <Alert icon={false} severity={params.value == 'Valid' ? 'success' : 'warning'}>
+      {params.value}
+    </Alert>
+  );
+}
 function renderEmail(params) {
   return (
     <Button variant="text" startIcon={<Email />}>
@@ -166,13 +174,12 @@ const renderAvatarEditInputCell = (params) => {
   return <AvatarEditInputCell {...params} />;
 };
 export default function FullFeaturedCrudGrid(props) {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const [rows, setRows] = useState(initialRows);
+  const [rowModesModel, setRowModesModel] = useState({});
   const navigate = useNavigate();
 
   const handleRowEditStop = (params, event) => {
     console.log(event);
-    console.log('event');
 
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -193,7 +200,7 @@ export default function FullFeaturedCrudGrid(props) {
     setRows(rows.filter((row) => row.id !== id));
   };
   const handleNavigationDetails = (id) => () => {
-    navigate('/staff/Detail');
+    navigate('/qoute');
   };
   const handleCancelClick = (id) => () => {
     setRowModesModel({
@@ -209,15 +216,17 @@ export default function FullFeaturedCrudGrid(props) {
 
   const processRowUpdate = (newRow, oldRow) => {
     console.log(newRow);
-    if (false) {
-      const updatedRow = { ...newRow, isNew: false };
-      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-      return updatedRow;
-    } else {
-      const updatedRow = { ...oldRow, isNew: true };
-      setRows(rows.map((row) => (row.id === oldRow.id ? updatedRow : row)));
-      return updatedRow;
-    }
+    //if (false) {
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
+    //}
+    /*
+     else {
+    const updatedRow = { ...oldRow, isNew: true };
+    setRows(rows.map((row) => (row.id === oldRow.id ? updatedRow : row)));
+    return updatedRow;
+    }*/
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -233,34 +242,44 @@ export default function FullFeaturedCrudGrid(props) {
       filterable: false,
       renderEditCell: renderAvatarEditInputCell,
       type: 'file',
-      width: 80,
-      editable: true
+      width: 80
     },
-    { field: 'id', headerName: 'Id', width: 20, editable: true },
-    { field: 'firstName', headerName: 'First Name', width: 150, editable: true },
-    { field: 'lastName', headerName: 'Last Name', width: 150, editable: true },
+    { field: 'id', headerName: 'Id', width: 20 },
+    { field: 'firstName', headerName: 'First Name', width: 150 },
+    { field: 'lastName', headerName: 'Last Name', width: 150 },
     {
       field: 'email',
       headerName: 'Email',
       width: 250,
       renderCell: renderEmail,
       align: 'left',
-      headerAlign: 'left',
-      editable: true
+      headerAlign: 'left'
     },
-    {
-      field: 'dateOfBirth',
-      headerName: 'Date Of Birth',
-      type: 'date',
-      width: 120,
-      editable: true
-    },
+
     {
       field: 'tel',
       headerName: 'Contact',
-      width: 210,
-      renderCell: renderTel,
-      editable: true
+      width: 150,
+      renderCell: renderTel
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      editable: true,
+      width: 150,
+      type: 'singleSelect',
+      valueOptions: [
+        { value: 'Pending', label: 'Pending' },
+        { value: 'Accepted', label: 'Paid' },
+        { value: 'Completed', label: 'Completed' }
+      ]
+    },
+    {
+      field: 'invoiceStatus',
+      headerName: 'Invoice status',
+      editable: true,
+      renderCell: renderInvoiceStatus,
+      width: 150
     },
     {
       field: 'actions',
@@ -378,34 +397,45 @@ export default function FullFeaturedCrudGrid(props) {
   ];
 
   return (
-    <Box
-      sx={{
-        height: 500,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary'
-        },
-        '& .textPrimary': {
-          color: 'text.primary'
-        }
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel, typeP: props.typeP }
-        }}
-        isCellEditable={() => (props.typeP === 'registered' ? true : false)}
-      />
-    </Box>
+    <Fragment>
+      <ContentBox className="analytics">
+        <Grid container spacing={3}>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Box
+              sx={{
+                height: 500,
+                width: '100%',
+                '& .actions': {
+                  color: 'text.secondary'
+                },
+                '& .textPrimary': {
+                  color: 'text.primary'
+                }
+              }}
+            >
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                editMode="row"
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={handleRowModesModelChange}
+                onRowEditStop={handleRowEditStop}
+                processRowUpdate={processRowUpdate}
+                slots={{
+                  toolbar: EditToolbar
+                }}
+                slotProps={{
+                  toolbar: { setRows, setRowModesModel, typeP: props.typeP }
+                }}
+                // isCellEditable={() => false}
+              />
+            </Box>
+          </Grid>
+        </Grid>
+      </ContentBox>
+    </Fragment>
   );
 }
+/**
+   
+ */

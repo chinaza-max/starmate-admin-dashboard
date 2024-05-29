@@ -171,83 +171,87 @@ const Qoute = () => {
               </Grid>
             </AccordionDetails>
           </Accordion>
-          <Accordion>
-            <AccordionSummary
-              id="User-Request"
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-            >
-              <Typography className="heading">User Request</Typography>
-            </AccordionSummary>
+          {id ? (
+            <Accordion>
+              <AccordionSummary
+                id="User-Request"
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+              >
+                <Typography className="heading">User Request</Typography>
+              </AccordionSummary>
 
-            <AccordionDetails>
-              <Grid container spacing={2}>
-                <Grid item xs={4} md={4}>
-                  <Card variant="outlined" sx={{ maxWidth: 360 }}>
-                    <Box sx={{ p: 2 }}>
-                      <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography gutterBottom variant="h6" component="div">
-                          SELECTED SERVICE
+              <AccordionDetails>
+                <Grid container spacing={2}>
+                  <Grid item xs={4} md={4}>
+                    <Card variant="outlined" sx={{ maxWidth: 360 }}>
+                      <Box sx={{ p: 2 }}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                          <Typography gutterBottom variant="h6" component="div">
+                            SELECTED SERVICE
+                          </Typography>
+                        </Stack>
+                        <Chip label="Cleaning" onDelete={() => {}} deleteIcon={<DoneIcon />} />
+                      </Box>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={4} md={4}>
+                    <Card variant="outlined" sx={{ maxWidth: 360 }}>
+                      <Box sx={{ p: 2 }}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                          <Typography gutterBottom variant="h6" component="div">
+                            SELECTED PLACE
+                          </Typography>
+                        </Stack>
+                        <Chip label="Home" onDelete={() => {}} deleteIcon={<DoneIcon />} />
+                      </Box>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={4} md={4}>
+                    <Card variant="outlined" sx={{ maxWidth: 360 }}>
+                      <Box sx={{ p: 2 }}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                          <Typography gutterBottom variant="h6" component="div">
+                            NO OF ROOMS
+                          </Typography>
+                        </Stack>
+                        <Chip label="10" onDelete={() => {}} deleteIcon={<DoneIcon />} />
+                      </Box>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={4} md={4}>
+                    <Card variant="outlined" sx={{ maxWidth: 360 }}>
+                      <Box sx={{ p: 2 }}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                          <Typography gutterBottom variant="h6" component="div">
+                            FREQUENCY
+                          </Typography>
+                        </Stack>
+                        <Chip label="1" onDelete={() => {}} deleteIcon={<DoneIcon />} />
+                      </Box>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={4} md={8}>
+                    <Card variant="outlined" sx={{ maxWidth: 360 }}>
+                      <Box sx={{ p: 2 }}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                          <Typography gutterBottom variant="h6" component="div">
+                            ADDITIONAL INFORMATION
+                          </Typography>
+                        </Stack>
+                        <Typography color="text.secondary" variant="body2">
+                          Pinstriped cornflower blue cotton blouse takes you on a walk to the park
+                          or just down the hall.
                         </Typography>
-                      </Stack>
-                      <Chip label="Cleaning" onDelete={() => {}} deleteIcon={<DoneIcon />} />
-                    </Box>
-                  </Card>
+                      </Box>
+                    </Card>
+                  </Grid>
                 </Grid>
-                <Grid item xs={4} md={4}>
-                  <Card variant="outlined" sx={{ maxWidth: 360 }}>
-                    <Box sx={{ p: 2 }}>
-                      <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography gutterBottom variant="h6" component="div">
-                          SELECTED PLACE
-                        </Typography>
-                      </Stack>
-                      <Chip label="Home" onDelete={() => {}} deleteIcon={<DoneIcon />} />
-                    </Box>
-                  </Card>
-                </Grid>
-                <Grid item xs={4} md={4}>
-                  <Card variant="outlined" sx={{ maxWidth: 360 }}>
-                    <Box sx={{ p: 2 }}>
-                      <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography gutterBottom variant="h6" component="div">
-                          NO OF ROOMS
-                        </Typography>
-                      </Stack>
-                      <Chip label="10" onDelete={() => {}} deleteIcon={<DoneIcon />} />
-                    </Box>
-                  </Card>
-                </Grid>
-                <Grid item xs={4} md={4}>
-                  <Card variant="outlined" sx={{ maxWidth: 360 }}>
-                    <Box sx={{ p: 2 }}>
-                      <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography gutterBottom variant="h6" component="div">
-                          FREQUENCY
-                        </Typography>
-                      </Stack>
-                      <Chip label="1" onDelete={() => {}} deleteIcon={<DoneIcon />} />
-                    </Box>
-                  </Card>
-                </Grid>
-                <Grid item xs={4} md={8}>
-                  <Card variant="outlined" sx={{ maxWidth: 360 }}>
-                    <Box sx={{ p: 2 }}>
-                      <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography gutterBottom variant="h6" component="div">
-                          ADDITIONAL INFORMATION
-                        </Typography>
-                      </Stack>
-                      <Typography color="text.secondary" variant="body2">
-                        Pinstriped cornflower blue cotton blouse takes you on a walk to the park or
-                        just down the hall.
-                      </Typography>
-                    </Box>
-                  </Card>
-                </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
+              </AccordionDetails>
+            </Accordion>
+          ) : (
+            ''
+          )}
         </Paper>
         <Paper>
           <Accordion defaultExpanded>

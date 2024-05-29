@@ -10,12 +10,12 @@ export const navigations = [
     ]
   },
   { name: 'Request', path: '/requests', icon: 'dashboard' },
-  { name: 'Quote', path: '/dashboard/default', icon: 'dashboard' },
-  { name: 'Manage Job', path: '/dashboard/default', icon: 'dashboard' },
+  { name: 'Create Quote', path: '/qoute', icon: 'dashboard' },
+  { name: 'Manage Job', path: '/manage-project', icon: 'dashboard' },
   { name: 'Manage Pricing', path: '/dashboard/default', icon: 'dashboard' },
   { name: 'Settlement', path: '/settlement', icon: 'dashboard' },
-
   { label: 'PAGES', type: 'label' },
+
   {
     name: 'Session/Auth',
     icon: 'security',

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -127,7 +126,7 @@ const initialRows = [
 ];
 
 function EditToolbar(props) {
-  const { setRows, setRowModesModel, setOpen } = props;
+  const { setRows, setRowModesModel, setOpen, tableData } = props;
   const handleClick = () => {
     const id = randomId();
     setRows((oldRows) => [...oldRows, { id, Unit: 1, Total: 1, Quantity: 1, isNew: true }]);
@@ -137,13 +136,14 @@ function EditToolbar(props) {
     }));
   };
   const handleClickOpen = () => setOpen(true);
+  const generatePDF = () => console.log(tableData);
 
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Add record
       </Button>
-      <Button color="primary" startIcon={<PictureAsPdfIcon />} onClick={handleClick}>
+      <Button color="primary" startIcon={<PictureAsPdfIcon />} onClick={generatePDF}>
         View PDF
       </Button>
       <Button color="primary" startIcon={<Payment />} onClick={handleClickOpen}>
@@ -290,6 +290,8 @@ export default function FullFeaturedCrudGrid(props) {
   const [open, setOpen] = useState(false);
   const [invoiceMode, setInvoiceMode] = useState('Once');
   const [numberInvoice, setnumberInvoice] = useState([]);
+  const [tableData, setTableData] = useState({ array: [], summary: {} });
+
   const [state, setState] = useState({
     title: 'my title',
     valid: dayjs(new Date()),
@@ -297,7 +299,7 @@ export default function FullFeaturedCrudGrid(props) {
     send: dayjs(new Date())
   });
 
-  const [summaryCal, setSummaryCal] = useState({ total: 0, vat: 0 });
+  const [summaryCal, setSummaryCal] = useState({ SubTotal: 0, vat: 0, TotalDue: 0 });
   const handleClose = () => setOpen(false);
 
   const navigate = useNavigate();
@@ -348,11 +350,19 @@ export default function FullFeaturedCrudGrid(props) {
     console.log('processRowUpdate');
 
     console.log(newRow);
+    console.log(oldRow);
+    console.log(newRow.Unit);
+    console.log(newRow.Total);
+    newRow = { ...newRow, Total: newRow.Unit * newRow.Quantity };
     //console.log(oldRow);
+
+    console.log(newRow);
+
     console.log(rows);
 
     // if (false) {
     const updatedRow = { ...newRow, isNew: false };
+
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     // console.log(updatedRow);
     calculateSummary(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
@@ -366,24 +376,37 @@ export default function FullFeaturedCrudGrid(props) {
     //}*/
   };
   const calculateSummary = (rows) => {
-    let total = 0;
+    let SubTotal = 0;
+    let TotalDue = 0;
     let vatCharge = 0;
 
     rows.forEach((data) => {
-      //console.log(data);
+      console.log(data);
       if (rowIdToAddVat.includes(data.id)) {
-        total += Number(data.Total);
-        total += (7.5 / 100) * Number(data.Total);
+        SubTotal += Number(data.Total);
+        TotalDue += Number(data.Total);
+        TotalDue += (7.5 / 100) * Number(data.Total);
         vatCharge += (7.5 / 100) * Number(data.Total);
       } else {
-        total += Number(data.Total);
+        TotalDue += Number(data.Total);
+        SubTotal += Number(data.Total);
       }
     });
 
-    console.log(vatCharge);
-    console.log(total);
+    setSummaryCal({
+      SubTotal: SubTotal.toFixed(2),
+      TotalDue: TotalDue.toFixed(2),
+      vat: vatCharge.toFixed(2)
+    });
 
-    setSummaryCal({ total: total.toFixed(2), vat: vatCharge.toFixed(2) });
+    setTableData({
+      array: rows,
+      summary: {
+        SubTotal: SubTotal.toFixed(2),
+        TotalDue: TotalDue.toFixed(2),
+        vat: vatCharge.toFixed(2)
+      }
+    });
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -427,7 +450,7 @@ export default function FullFeaturedCrudGrid(props) {
             Sub Total
           </Grid>
           <Grid item xs={6}>
-            ₦{summaryCal.total}
+            ₦{summaryCal.SubTotal}
           </Grid>
           <Grid item xs={6}>
             VAT @7.50%
@@ -439,7 +462,7 @@ export default function FullFeaturedCrudGrid(props) {
             Total Due
           </Grid>
           <Grid item xs={6}>
-            ₦{summaryCal.total}
+            ₦{summaryCal.TotalDue}
           </Grid>
         </Grid>
       </Box>
@@ -506,7 +529,7 @@ export default function FullFeaturedCrudGrid(props) {
                 type="number"
                 name={`numberInvoice[${index}].text`}
                 id="standard-basic"
-                label={`Enter Deposit Percentage  ₦${(value.text / 100) * summaryCal.total}]`}
+                label={`Enter Deposit Percentage  ₦${(value.text / 100) * summaryCal.TotalDue}]`}
                 value={value.text}
                 validators={['required']}
                 onChange={(newValue) => handleChange(`numberInvoice[${index}].text`)(newValue)}
@@ -565,7 +588,7 @@ export default function FullFeaturedCrudGrid(props) {
       field: 'Total',
       headerName: 'Total',
       width: 100,
-      editable: true
+      editable: false
     },
 
     {
@@ -631,9 +654,6 @@ export default function FullFeaturedCrudGrid(props) {
     }
   ];
   useEffect(() => {
-    console.log('useEffect');
-
-    console.log(rows);
     calculateSummary(rows);
 
     //[summaryCal, rows, rowIdToAddVat, rowModesModel]
@@ -672,14 +692,14 @@ export default function FullFeaturedCrudGrid(props) {
           noRowsOverlay: CustomNoRowsOverlay
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel, setOpen },
+          toolbar: { setRows, setRowModesModel, setOpen, tableData },
           footer: { rowModesModel }
         }}
         isCellEditable={() => true}
       />
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Convert to invoice Total amount : ₦{summaryCal.total}
+          Convert to invoice Total amount : ₦{summaryCal.TotalDue}
         </DialogTitle>
 
         <DialogContent dividers>
